@@ -315,7 +315,7 @@ def air_cargo_p2() -> AirCargoProblem:
 
 def air_cargo_p3() -> AirCargoProblem:
     # TODO implement Problem 3 definition
-     '''
+    '''
     Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD)
         ∧ At(P1, SFO) ∧ At(P2, JFK)
         ∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4)
@@ -323,7 +323,7 @@ def air_cargo_p3() -> AirCargoProblem:
         ∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD))
     Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
     '''
-    cargos = ['C1', 'C2', 'C3', 'C4']
+    cargos = ['C1','C2','C3','C4']
     planes = ['P1', 'P2']
     airports = ['ATL', 'JFK', 'ORD', 'SFO']
     
