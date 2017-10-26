@@ -310,7 +310,7 @@ class PlanningGraph():
         #   set iff all prerequisite literals for the action hold in S0.  This can be accomplished by testing
         #   to see if a proposed PgNode_a has prenodes that are a subset of the previous S level.  Once an
         #   action node is added, it MUST be connected to the S node instances in the appropriate s_level set.
-         self.a_levels.append(set()) 
+        self.a_levels.append(set()) 
         for action in self.all_actions:
             # Build an action Node
             node_a = PgNode_a(action)
@@ -411,7 +411,7 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Inconsistent Effects between nodes
-         for a1_eff_add in node_a1.action.effect_add:
+        for a1_eff_add in node_a1.action.effect_add:
             for a2_eff_rem in node_a2.action.effect_rem:
                 if a1_eff_add == a2_eff_rem:
                     return True
@@ -472,7 +472,7 @@ class PlanningGraph():
         """
 
         # TODO test for Competing Needs between nodes
-           for parent1 in node_a1.parents:
+        for parent1 in node_a1.parents:
             for parent2 in node_a2.parents:
                 if parent1.is_mutex(parent2):
                     return True   
