@@ -312,17 +312,12 @@ class PlanningGraph():
         #   action node is added, it MUST be connected to the S node instances in the appropriate s_level set.
         self.a_levels.append(set()) 
         for action in self.all_actions:
-            # Build an action Node
             node_a = PgNode_a(action)
-            # If preconditions are satisfied by the previous node, then this action node can be reachable.
             if set(node_a.prenodes).issubset(self.s_levels[level]): 
                 for s in self.s_levels[level]:
                     if s in node_a.prenodes:
-                        # This reachable action node is a child of the preceding level's state node
                         s.children.add(node_a) 
-                        # The preceding level state node becomes a parent of this reachable action node
                         node_a.parents.add(s)
-                        # Add the action level from the node.
                 self.a_levels[level].add(node_a)
 
 
@@ -346,7 +341,6 @@ class PlanningGraph():
         self.s_levels.append(set())
         for a in self.a_levels[level-1]:
             for a_effnode in a.effnodes:
-                # Adding the effect produced by the action to the S level.
                 self.s_levels[level].add(a_effnode)
             for s in self.s_levels[level]:
                 if s in a.effnodes:
@@ -415,7 +409,6 @@ class PlanningGraph():
             for a2_eff_rem in node_a2.action.effect_rem:
                 if a1_eff_add == a2_eff_rem:
                     return True
-        # Checking Node_a1 removing effect negates the Node_a2 adding effect.      
         for a1_eff_rem in node_a1.action.effect_rem:
             for a2_eff_add in node_a2.action.effect_add:
                 if a1_eff_rem == a2_eff_add:
@@ -441,19 +434,16 @@ class PlanningGraph():
             for a2_pre_neg in node_a2.action.precond_neg:
                 if a1_eff_add == a2_pre_neg:
                     return True
-        # Effet of a2 add negates preconditon of a1        
         for a2_eff_add in node_a2.action.effect_add:
             for a1_pre_neg in node_a1.action.precond_neg:
                 if a2_eff_add == a1_pre_neg:
                     return True
                 
-        # Effet of a1 removal negates preconditon of a2        
         for a1_eff_rem in node_a1.action.effect_rem:
             for a2_pre_pos in node_a2.action.precond_pos:
                 if a1_eff_rem == a2_pre_pos:
                     return True
                 
-        # Effet of a2 removal negates preconditon of a1
         for a2_eff_rem in node_a2.action.effect_rem:
             for a1_pre_pos in node_a1.action.precond_pos:
                 if a2_eff_rem == a1_pre_pos:
@@ -534,12 +524,12 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Inconsistent Support between nodes
-        for a1 in node_s1.parents:
-            for a2 in node_s2.parents:
-                # If there exist only one pair which is not mutex, then return False 
-                if a1.is_mutex(a2) == False:
+        for n1 in node_s1.parents:
+            for n2 in node_s2.parents:
+                # if n1 not mutex of n2 return false else if all mutex return true 
+                if n1.is_mutex(n2) == False:
                     return False
-        return True
+        return True  # all are mutex
 
     def h_levelsum(self) -> int:
         """The sum of the level costs of the individual goals (admissible if goals independent)
@@ -548,18 +538,17 @@ class PlanningGraph():
         """
         level_sum = 0
         # TODO implement
-        # for each goal in the problem, determine the level cost, then add them together
+        # for each goal in the problem, determine the level cost, 
+        # then add them together
         # define a function to find first level occurence of a positive goal literal
-        def check(clause):    
+        def control(goal):    
             for level in range(len(self.s_levels)):
-                for c in self.s_levels[level]:
-                    if c.is_pos:
-                        if clause == c.symbol:
+                for item in self.s_levels[level]:
+                    if item.is_pos:
+                        if goal == item.symbol:
                             return level
             return False
-        # for each goal in the problem, determine the level cost, then add them together        
-        for clause in self.problem.goal:
-            level_sum += check(clause)
-        
+        for goal in self.problem.goal:
+            level_sum += control(goal)
         
         return level_sum
